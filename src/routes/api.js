@@ -17,8 +17,20 @@ router.get('/stats', function * (res, res, next) {
   res.json(result);
 });
 
-router.post('/:username', function * (req, res, next) {
-  res.json({succes: "API 4500 post /username"});
+router.get('/api/:username', function * (req, res, next) {
+  const stats = yield StatService.aggregateByUsername({username: req.params.username});
+  const result = {};
+
+  for (const stat of stats) {
+    const val = stat.dataValues;
+    const date = val.createdAt.toISOString().substr(0,10);
+
+    const arr = result[date] || {};
+    arr[val.city] = val.city_count;
+    result[date] = arr;
+  };
+
+  res.json(result);
 });
 
 
