@@ -1,12 +1,15 @@
 const express = require('express');
 const co_express_router = require('co-express-router');
 
+const validate = require('../lib/validate');
 const StatService = require('../services/stats');
 
 const router = express.Router();
 co_express_router(router);
 
-router.get('/stats', function * (res, res, next) {
+
+
+router.get('/stats', validate, function * (res, res, next) {
   const stats = yield StatService.stats({});
   const result = {};
 
@@ -17,7 +20,7 @@ router.get('/stats', function * (res, res, next) {
   res.json(result);
 });
 
-router.get('/api/:username', function * (req, res, next) {
+router.get('/api/:username', validate, function * (req, res, next) {
   const stats = yield StatService.aggregateByUsername({username: req.params.username});
   const result = {};
 
