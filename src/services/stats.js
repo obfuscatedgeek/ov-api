@@ -11,11 +11,8 @@ stats.stats = function * (options) {
   const rec = yield model.demographic.findAll({
     group: ['city'],
     attributes: ['city', [model.sequelize.fn('COUNT', 'city'), 'city_count']],
-    order: [model.sequelize.col('city_count')]
+    order: [model.sequelize.literal('city_count DESC')]
   });
-
-
-  console.log('rec is', Object.keys(rec));
 
   return rec;
 }
